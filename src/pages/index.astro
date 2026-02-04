@@ -1,0 +1,197 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog', ({ data }) => !data.draft);
+const latestPosts = allPosts
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const allProjects = await getCollection('projects');
+const featuredProjects = allProjects
+  .filter(p => p.data.featured)
+  .slice(0, 3);
+---
+
+<BaseLayout title="Home">
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content fade-in">
+        <p class="hero-greeting">Hi, I'm</p>
+        <h1 class="hero-title">
+          <span class="gradient-text">ariaria2021</span>
+        </h1>
+        <p class="hero-description">
+          開発者・クリエイター。ソフトウェア開発やプログラミングについてブログを書いています。
+        </p>
+        <div class="hero-actions">
+          <a href="/blog" class="btn btn-primary">ブログを読む</a>
+          <a href="/projects" class="btn btn-secondary">プロジェクトを見る</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>最新の記事</h2>
+        <p>最近書いたブログ記事</p>
+      </div>
+      <div class="grid grid-3">
+        {latestPosts.map((post) => (
+          <a href={`/blog/${post.slug}`} class="card post-card">
+            <time class="post-date">
+              {post.data.date.toLocaleDateString('ja-JP')}
+            </time>
+            <h3 class="post-title">{post.data.title}</h3>
+            <p class="post-description">{post.data.description}</p>
+            {post.data.tags && (
+              <div class="post-tags">
+                {post.data.tags.map((tag) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+            )}
+          </a>
+        ))}
+      </div>
+      {latestPosts.length === 0 && (
+        <p class="empty-state">まだ記事がありません。</p>
+      )}
+      <div class="section-footer">
+        <a href="/blog" class="btn btn-secondary">すべての記事を見る →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2>プロジェクト</h2>
+        <p>制作したもの・作っているもの</p>
+      </div>
+      <div class="grid grid-2">
+        {featuredProjects.map((project) => (
+          <div class="card project-card">
+            <h3 class="project-title">{project.data.title}</h3>
+            <p class="project-description">{project.data.description}</p>
+            {project.data.tags && (
+              <div class="project-tags">
+                {project.data.tags.map((tag) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+            )}
+            <div class="project-links">
+              {project.data.github && (
+                <a href={project.data.github} target="_blank" rel="noopener" class="btn btn-secondary">
+                  GitHub
+                </a>
+              )}
+              {project.data.demo && (
+                <a href={project.data.demo} target="_blank" rel="noopener" class="btn btn-primary">
+                  Demo
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      {featuredProjects.length === 0 && (
+        <p class="empty-state">まだプロジェクトがありません。</p>
+      )}
+      <div class="section-footer">
+        <a href="/projects" class="btn btn-secondary">すべてのプロジェクトを見る →</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    background: radial-gradient(ellipse at top, rgba(129, 140, 248, 0.08) 0%, transparent 50%);
+  }
+
+  .hero-content {
+    max-width: 700px;
+  }
+
+  .hero-greeting {
+    font-size: 1.125rem;
+    color: var(--color-accent);
+    margin-bottom: var(--space-sm);
+  }
+
+  .hero-title {
+    margin-bottom: var(--space-lg);
+  }
+
+  .hero-description {
+    font-size: 1.25rem;
+    margin-bottom: var(--space-xl);
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: var(--space-md);
+    flex-wrap: wrap;
+  }
+
+  .post-card {
+    display: block;
+    text-decoration: none;
+  }
+
+  .post-date {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+
+  .post-title {
+    margin: var(--space-sm) 0;
+    color: var(--color-text);
+    font-size: 1.25rem;
+  }
+
+  .post-description {
+    font-size: 0.875rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .post-tags, .project-tags {
+    display: flex;
+    gap: var(--space-xs);
+    flex-wrap: wrap;
+  }
+
+  .project-title {
+    color: var(--color-text);
+    margin-bottom: var(--space-sm);
+  }
+
+  .project-description {
+    font-size: 0.875rem;
+    margin-bottom: var(--space-md);
+  }
+
+  .project-links {
+    display: flex;
+    gap: var(--space-sm);
+    margin-top: var(--space-md);
+  }
+
+  .section-footer {
+    margin-top: var(--space-2xl);
+    text-align: center;
+  }
+
+  .empty-state {
+    text-align: center;
+    color: var(--color-text-muted);
+    padding: var(--space-2xl);
+  }
+</style>
