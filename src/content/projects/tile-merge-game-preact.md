@@ -4,9 +4,10 @@ description: "React版をPreactに移植・最適化。Port版とSignalsを使�
 date: 2026-02-07
 tags: ["Preact", "Signals", "Performance", "TypeScript", "Vite"]
 github: "https://github.com/ariaria2021/tile-merge-game-preact"
-demo: "https://ariaria2021.github.io/tile-merge-game-preact/native/"
+demo_port: "https://ariaria2021.github.io/tile-merge-game-preact/port/"
+demo_native: "https://ariaria2021.github.io/tile-merge-game-preact/native/"
 image: ""
-featured: false
+featured: true
 ---
 
 ## 概要
