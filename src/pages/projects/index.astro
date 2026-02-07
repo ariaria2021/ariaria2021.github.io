@@ -38,7 +38,17 @@ const sortedProjects = allProjects.sort((a, b) => b.data.date.valueOf() - a.data
                   GitHub
                 </a>
               )}
-              {project.data.demo && (
+              {project.data.demo_port && (
+                <a href={project.data.demo_port} target="_blank" rel="noopener" class="btn btn-secondary">
+                  Port Demo
+                </a>
+              )}
+              {project.data.demo_native && (
+                <a href={project.data.demo_native} target="_blank" rel="noopener" class="btn btn-primary">
+                  Native Demo
+                </a>
+              )}
+              {!project.data.demo_port && !project.data.demo_native && project.data.demo && (
                 <a href={project.data.demo} target="_blank" rel="noopener" class="btn btn-primary">
                   Demo
                 </a>
@@ -102,6 +112,7 @@ const sortedProjects = allProjects.sort((a, b) => b.data.date.valueOf() - a.data
   .project-links {
     display: flex;
     gap: var(--space-sm);
+    flex-wrap: wrap;
   }
 
   .project-links svg {
