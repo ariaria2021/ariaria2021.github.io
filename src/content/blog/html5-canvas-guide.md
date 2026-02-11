@@ -17,7 +17,7 @@ tags: ["HTML5", "Canvas", "TypeScript", "Tutorial", "GameDev"]
 | フォーム入力 | `<video>`, `<audio>` — メディア再生 |
 | テーブルレイアウト | `<article>`, `<section>` — セマンティックな構造化 |
 
-> [!NOTE]
+> **補足**
 > この記事では、[canvas-tower-defense](https://ariaria2021.github.io/canvas-tower-defense/) のソースコードを引用しながら各APIを解説します。
 
 ## 1. `<canvas>` とは
@@ -108,7 +108,7 @@ ctx.fill();
 
 `arc()` のパラメータは `arc(中心x, 中心y, 半径, 開始角度, 終了角度)` です。`0` から `Math.PI * 2`（360度）まで描けば完全な円になります。半円にしたい場合は `Math.PI` までにします。
 
-> [!TIP]
+> **ヒント**
 > 公式リファレンスでは、円弧の描き方や反時計回りの指定など、より詳細なパラメータが解説されています。→ [MDN: CanvasRenderingContext2D.arc()](https://developer.mozilla.org/ja/docs/Web/API/CanvasRenderingContext2D/arc)
 
 ## 5. 座標変換 — `save()` / `scale()` / `restore()`
@@ -136,7 +136,7 @@ this.ctx.restore();                        // 保存した状態に戻す
 
 この **save → 変換 → 描画 → restore** のパターンは、Canvas開発で非常によく使われるイディオムです。
 
-> [!IMPORTANT]
+> **注意**
 > `restore()` を忘れると、以降のすべての描画がスケーリングされたままになります。必ずペアで使いましょう。
 
 ## 6. エフェクト — 影で光らせる
@@ -189,7 +189,7 @@ loop(timestamp: number) {
 | `setInterval(fn, 16)` | 他のタブに切り替えても動き続ける。タイミングが不正確。 |
 | `requestAnimationFrame(fn)` | タブが非表示になると自動停止。ブラウザの描画と同期して効率的。 |
 
-> [!TIP]
+> **ヒント**
 > `dt`（デルタタイム）を使って移動量を計算することで、フレームレートが変わっても一定速度で動くようにしています。これは **フレームレート非依存** と呼ばれるゲーム開発の基本テクニックです。
 
 ## 8. グリッド描画 — forループで規則的なパターン
@@ -264,7 +264,7 @@ Canvas APIの基本をまとめると：
 - [タワーディフェンスを遊ぶ](https://ariaria2021.github.io/canvas-tower-defense/)
 - [ソースコード (GitHub)](https://github.com/ariaria2021/canvas-tower-defense)
 
-> [!NOTE]
+> **補足**
 > この記事で引用しているコードは、コミット [`ecec197`](https://github.com/ariaria2021/canvas-tower-defense/tree/ecec19741b10cffeacb0f57aea191f16694f9354) 時点のものです。最新のコードとは異なる場合があります。
 
 ## 参考文献
