@@ -1,6 +1,6 @@
 ---
-title: "HTMLは知ってるけどCanvas APIって何？ ── タワーディフェンスの実装を例に学ぶHTML5 Canvas入門"
-description: "HTMLの基礎知識がある方に向けて、HTML5で追加されたCanvas APIの基本をゼロから解説します。実際のゲーム（canvas-tower-defense）のソースコードを使って、図形描画・パス・座標変換・アニメーションの仕組みを具体的に学べます。"
+title: "HTML5 Canvas API入門 ── タワーディフェンスの実装を例に基本を解説"
+description: "HTMLの基礎知識がある方を対象に、HTML5 Canvas APIの基本を解説。タワーディフェンスゲームの実装コードを例に、図形描画・パス・座標変換・アニメーションの仕組みを説明します。"
 date: 2026-02-11
 tags: ["HTML5", "Canvas", "TypeScript", "Tutorial", "GameDev"]
 ---
@@ -18,9 +18,9 @@ tags: ["HTML5", "Canvas", "TypeScript", "Tutorial", "GameDev"]
 | テーブルレイアウト | `<article>`, `<section>` — セマンティックな構造化 |
 
 > [!NOTE]
-> この記事では、実際に私が作成した[タワーディフェンスゲーム](https://ariaria2021.github.io/canvas-tower-defense/)のソースコードを引用しながら解説します。「教科書の例」ではなく「動いている本物のコード」で学べるのがポイントです。
+> この記事では、[canvas-tower-defense](https://ariaria2021.github.io/canvas-tower-defense/) のソースコードを引用しながら各APIを解説します。
 
-## 1. `<canvas>` とは — 「白紙のスケッチブック」
+## 1. `<canvas>` とは
 
 `<canvas>` は、JavaScriptからピクセル単位で絵を描くための要素です。HTMLに1行書くだけで、描画可能な領域が出現します。
 
@@ -259,10 +259,13 @@ Canvas APIの基本をまとめると：
 | アニメーション | `requestAnimationFrame()` | ゲームループ |
 | エフェクト | `shadowBlur` | 弾丸の発光 |
 
-すべてプラグインやライブラリなしで実現できます。`<canvas>` は「自由に描ける白紙」であり、**想像力がそのままアウトプットになる**——それがこのAPIの最大の魅力です。
+上記のメソッドはすべて外部ライブラリなしで利用できます。基本的な図形描画とアニメーションループの組み合わせだけで、インタラクティブなアプリケーションを構築できることが Canvas API の特徴です。
 
-👉 [タワーディフェンスを遊んでみる](https://ariaria2021.github.io/canvas-tower-defense/)
-👉 [ソースコード全文を見る (GitHub)](https://github.com/ariaria2021/canvas-tower-defense)
+- [タワーディフェンスを遊ぶ](https://ariaria2021.github.io/canvas-tower-defense/)
+- [ソースコード (GitHub)](https://github.com/ariaria2021/canvas-tower-defense)
+
+> [!NOTE]
+> この記事で引用しているコードは、コミット [`ecec197`](https://github.com/ariaria2021/canvas-tower-defense/tree/ecec19741b10cffeacb0f57aea191f16694f9354) 時点のものです。最新のコードとは異なる場合があります。
 
 ## 参考文献
 
