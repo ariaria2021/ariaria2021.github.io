@@ -280,6 +280,52 @@ a:hover {
     margin: var(--space-lg) 0;
 }
 
+.prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-lg) 0;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    display: block;
+}
+
+.prose thead {
+    display: table-header-group;
+}
+
+.prose tbody {
+    display: table-row-group;
+}
+
+.prose tr {
+    display: table-row;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.prose th {
+    background: var(--color-bg-tertiary);
+    color: var(--color-text);
+    font-weight: 600;
+    text-align: left;
+    padding: var(--space-sm) var(--space-md);
+    border-bottom: 2px solid var(--color-border-hover);
+    white-space: nowrap;
+}
+
+.prose td {
+    padding: var(--space-sm) var(--space-md);
+    color: var(--color-text-secondary);
+    vertical-align: top;
+}
+
+.prose tbody tr:nth-child(even) {
+    background: var(--color-bg-secondary);
+}
+
+.prose tbody tr:hover {
+    background: var(--color-bg-tertiary);
+}
+
 /* Animations */
 @keyframes fadeIn {
     from {
