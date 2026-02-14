@@ -1,5 +1,5 @@
 ---
-title: "ReacユーザーのためのVue 3入門 - 同じゲームでフレームワークを比較"
+title: "ReactユーザーのためのVue 3入門 - 同じゲームでフレームワークを比較"
 description: "React開発者向けに、Vue 3の基本を学ぶガイド。同じTile Mergeゲームの実装を例に、状態管理、ライフサイクル、コンポーネント設計の違いを解説します。"
 date: 2026-02-14
 tags: ["Vue 3", "React", "フレームワーク比較", "TypeScript", "開発ガイド"]
@@ -9,19 +9,19 @@ tags: ["Vue 3", "React", "フレームワーク比較", "TypeScript", "開発ガ
 
 同じゲーム（Tile Merge Game）をReactとVue 3で実装し、その違いを直接比較することで、フレームワークの選択肢を広げられるようにしました。
 
-## 📚 このガイドの構成
+## このガイドの構成
 
 このガイドは以下のような構成になっています：
 
 1. **プロジェクト構成**：Monorepoでの複数フレームワーク管理
 2. **状態管理**：`useState` vs `ref()` / `reactive()`
 3. **ライフサイクル**：`useEffect` vs Vue3の各種hook
-4. **コンポーネント設計**：Props、Events、`<script setup>`
+4. **コンポーネント設計**：`Props`、`Events`、`<script setup>`
 5. **イベント処理**：キーボード・タッチ入力
 6. **スタイリング**：CSS Modules と `<style scoped>`
 7. **実装パターン比較**：具体的なコード例
 
-## 🎮 サンプルプロジェクト
+## サンプルプロジェクト
 
 このガイドで使うサンプルプロジェクト：
 
@@ -34,7 +34,7 @@ tags: ["Vue 3", "React", "フレームワーク比較", "TypeScript", "開発ガ
 
 ---
 
-## 1️⃣ プロジェクト構成の違い
+## 1. プロジェクト構成の違い
 
 ### React版の構造例
 
@@ -62,11 +62,11 @@ export const useGrid = () => {
 ```typescript
 // packages/vue3/src/composables/useGame.ts
 export const useGame = () => {
-  const grid = ref<Grid>(() => {
+  const grid = ref<Grid>((() => {
     let initialGrid = createEmptyGrid();
     initialGrid = addRandomTile(initialGrid);
     return initialGrid;
-  }());
+  })());
 
   const move = (direction: Direction) => {
     // ゲーム処理
@@ -89,7 +89,7 @@ export const useGame = () => {
 
 ---
 
-## 2️⃣ 状態管理：useState vs ref()
+## 2. 状態管理：useState vs ref()
 
 ### React：useState
 
@@ -148,7 +148,7 @@ const updateScore = (addedScore: number) => {
 **特徴**：
 - **直感的な更新**：`score.value += addedScore` でOK
 - `reactive()` ではプロキシにより自動追跡
-- テンプレート内では `.value` 不要（自動unrap）
+- テンプレート内では `.value` 不要（自動unwrap）
 
 **比較表**：
 
@@ -161,7 +161,7 @@ Vue 3:  score.value += addedScore
 
 ---
 
-## 3️⃣ ライフサイクル：useEffect vs watch/onMounted
+## 3. ライフサイクル：useEffect vs watch/onMounted
 
 ### React：useEffect
 
@@ -252,7 +252,7 @@ onBeforeUnmount(() => {
 
 ---
 
-## 4️⃣ コンポーネント設計：Props と emit
+## 4. コンポーネント設計：Props と emit
 
 ### React：Props と callback
 
@@ -308,12 +308,12 @@ defineEmits<{
 |---|---|---|
 | Props渡し | `<Header score={5} />` | `<Header :score="5" />` |
 | 子→親通信 | callback: `onReset()` | emit: `@reset` |
-| 型定義 | interface Props + FC<Props> | defineProps<Props>() |
+| 型定義 | interface Props + FC<Props> | `defineProps<Props>()` |
 | イベント発火 | `onClick={onReset}` | `@click="$emit('reset')"` |
 
 ---
 
-## 5️⃣ テンプレート内での差分：v-for と条件分岐
+## 5. テンプレート内での差分：v-for と条件分岐
 
 ### React：map と三項演算子
 
@@ -391,7 +391,7 @@ const tiles = computed(() => {
 
 ---
 
-## 6️⃣ CSS Modules と scoped styles
+## 6. CSS Modules と scoped styles
 
 ### React：CSS Modules
 
@@ -464,16 +464,15 @@ import tileStyles from '../styles/Tile.module.css'
 
 **スタイルスコープの比較**：
 
-| 項目 | React + CSS Modules | Vue 3 + <style scoped> |
+| 項目 | React + CSS Modules | Vue 3 + Scoped Styles |
 |---|---|---|
-| スコープ隔離 | ✅ hash で自動隔離 | ✅ scoped attribute で自動隔離 |
-| 開発時DX | クラス名の型チェック | スタイル即座に反映 |
-| バンドルサイズ | CSS Modules | <style scoped> |
-| 推奨パターン | CSS Modules | scoped（推奨） |
+| スコープ隔離 | `hash` 値で自動隔離 | 属性セレクタで自動隔離 |
+| 開発体験 | クラス名の型チェックが可能 | 単一ファイル内での記述 |
+| 仕組み | 標準の `CSS Modules` | Vue 固有の機能（推奨） |
 
 ---
 
-## 7️⃣ イベント処理：キーボード・タッチ
+## 7. イベント処理：キーボード・タッチ
 
 ### React：useEffect で登録・解除
 
@@ -565,14 +564,14 @@ onBeforeUnmount(() => {
 
 | 項目 | React | Vue 3 |
 |---|---|---|
-| イベントリスナ登録 | `addEventListener` + useEffect | onMounted |
-| リスナ解除 | useEffect cleanup | onBeforeUnmount |
-| テンプレートイベント | `onClick={fn}` | `@click="fn"` |
+| リスナ登録 | `addEventListener` + `useEffect` | `onMounted` |
+| リスナ解除 | `useEffect` のクリーンアップ | `onBeforeUnmount` |
+| テンプレート | `onClick={fn}` | `@click="fn"` |
 | 依存管理 | 手動（依存配列） | 自動（リアクティブ） |
 
 ---
 
-## 🎯 学習ポイント：React vs Vue 3
+## 学習ポイント：React vs Vue 3
 
 ### 1. 状態管理の哲学の違い
 
@@ -591,7 +590,7 @@ onBeforeUnmount(() => {
 **React**：
 - `useEffect` が全てを担当
 - 依存配列で「何が変わったか」を明示
-- 複数のeffectが並行実行される
+- 複数の `effect` が並行実行される
 
 **Vue 3**：
 - 専用の hook が分かれている
@@ -605,32 +604,24 @@ onBeforeUnmount(() => {
 - ロジックが複雑になりやすい
 
 **Vue 3**：
-- Template：HTML風で宣言的
+- Template：HTML 風で宣言的
 - ロジックと表現が分離
 - 学習コスト低い
 
 ---
 
-## 🚀 次のステップ
+## ローカルでの操作方法
 
-1. **[tile-merge-game-frameworks](https://github.com/ariaria2021/tile-merge-game-frameworks)** をクローンして両バージョンのコードを読む
-2. React版をローカルで実行：`npm run dev:react`
-3. Vue3版をローカルで実行：`npm run dev:vue3`
-4. 同じ機能が異なるコードでどう実装されているか比較
+今回のサンプルコードは、ローカル環境でも確認できます。
+
+1. [tile-merge-game-frameworks](https://github.com/ariaria2021/tile-merge-game-frameworks) をクローン
+2. `npm run dev:react` または `npm run dev:vue3` で各フレームワーク版を起動
 
 ---
 
-## 📖 参考資料
+## 参考資料
 
 - [Vue 3 公式ドキュメント](https://vuejs.org/)
 - [Composition API ガイド](https://vuejs.org/guide/extras/composition-api-faq.html)
 - [React ドキュメント](https://react.dev/)
 - [tile-merge-game-frameworks リポジトリ](https://github.com/ariaria2021/tile-merge-game-frameworks)
-
----
-
-**最後に**：ReactとVue 3は両方とも強力なフレームワークです。このガイドがあなたのフレームワーク選択の手助けになれば幸いです！ 🎉
-
-どのフレームワークを選ぶにせよ、**原理を理解する**ことが重要です。このガイドが少しでもお役に立てば嬉しいです。
-
-Happy coding! 💻
