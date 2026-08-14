@@ -1,17 +1,28 @@
 ---
-title: "React & VueユーザーのためのSvelte 5入門 - 「コンパイラ型」は何が違うのか？同じゲームで徹底比較"
-description: "React・Vueを学んできた開発者に向けて、Svelteの特徴（仮想DOMなし、コンパイル時リアクティビティ、Svelte 5のRunes）を同じ2048ゲームの実装をもとに分かりやすく解説します。"
-date: 2026-02-15
-tags: ["Svelte", "Svelte 5", "React", "Vue 3", "フレームワーク比較", "TypeScript", "入門"]
+title: "React・VueからSvelte 5へ：コンパイラ型フレームワークの実力とバンドルサイズ比較"
+description: "ReactやVue 3で作成した2048ゲームをSvelte 5（Runes）に移植。仮想DOMを持たないコンパイラ型フレームワークの書き心地や、本番ビルドのサイズ比較をまとめました。"
+date: 2026-08-14
+tags: ["Svelte", "Svelte 5", "React", "Vue 3", "フレームワーク比較", "TypeScript"]
 ---
 
 ## はじめに
 
-フロントエンドの主要なフレームワークとして広く使われている **React** や **Vue**。その一方で、「仮想DOMを使わない」「コンパイラがDOM操作コードを生成する」という独自のアプローチで注目を集めているのが **Svelte（スベルテ）** です。
+Reactで開発していると、「状態が変わるたびにコンポーネント全体が再実行される」というレンダリングの仕組みに少し扱いづらさを感じることがあります。
 
-さらに最新の **Svelte 5** では、新機能 **Runes（ルーンズ）** が導入され、リアクティビティの扱いやすさとTypeScriptとの親和性が大幅に強化されました。
+以前、同じ2048ゲーム（Tile Merge Game）を [Vue 3](https://ariaria2021.github.io/tile-merge-game-frameworks/vue3/) や [Preact](https://ariaria2021.github.io/tile-merge-game-preact/) で動かして比較してきましたが、今回は「仮想DOMを使わない」という全く異なるアプローチを取る **Svelte 5** を試してみました。
 
-本記事では、ReactやVueの経験を持つ開発者に向けて、「Svelteとはどのような設計思想のフレームワークなのか」「ReactやVueと何が違うのか」を、同一のゲーム（Tile Merge Game / 2048）の実装コードを比較しながら解説します。
+## サンプルプロジェクト
+
+今回の比較対象プロジェクト：
+
+**📦 [tile-merge-game-frameworks](https://github.com/ariaria2021/tile-merge-game-frameworks)**
+
+- React版：https://ariaria2021.github.io/tile-merge-game-frameworks/react/
+- Vue3版：https://ariaria2021.github.io/tile-merge-game-frameworks/vue3/
+- Svelte版：https://ariaria2021.github.io/tile-merge-game-frameworks/svelte/
+
+見た目や操作感はまったく同じですが、内部の設計やビルド結果には大きな違いが出ました。
+ReactやVueの書き方と対比しながら、Svelte 5の特徴や書き心地を整理していきます。
 
 ---
 
@@ -36,6 +47,22 @@ ReactやVueとSvelteの最大の違いは、**「実行時（ランタイム）�
    - 特別なセッター関数や `.value` へのアクセスを多用せず、自然な代入操作で状態更新とUIの同期が行われます。
 3. **Write Less Code（少ないコード量）**
    - ボイラープレート（定型文）が少なく、HTML/CSS/JSの標準に近い記述スタイルを維持できます。
+4. **Minimal Bundle Size（極小のバンドルサイズ）**
+   - フレームワーク自体の大きなランタイムを同梱しないため、配布サイズが非常に軽量です。
+
+### 実際にビルドして比較したバンドルサイズ
+
+同一のゲームロジック・同一UI仕様で、各フレームワークの本番ビルド（Vite / JSバンドル）のサイズを測定・比較しました。
+
+| フレームワーク | JSサイズ (Raw) | JSサイズ (gzip圧縮後) | React比 |
+| :--- | :--- | :--- | :--- |
+| **Svelte 5** | **48.3 kB** | **18.3 kB** | **約 71% 削減 (最軽量)** |
+| **Vue 3** | 68.4 kB | 27.2 kB | 約 57% 削減 |
+| **React 19** | 201.3 kB | 63.5 kB | 基準 |
+
+※ CSSはすべて共通（2.69 kB / gzip: 0.92 kB）です。
+
+Svelteは仮想DOMなどのランタイムエンジンを持たず、必要なDOM更新処理だけをコンパイラが出力するため、gzip圧縮後で **約18kB**（Reactの約3分の1未満）という驚異的な軽さを実現しています。
 
 ---
 
