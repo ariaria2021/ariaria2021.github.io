@@ -114,6 +114,8 @@ pnpm run dev:vue3
 ## 関連資料
 
 - 📖 [React → Vue 3 学習ガイド](https://ariaria2021.github.io/blog/react-to-vue3-tile-merge-game/)
+- 📖 [React / Vue → Svelte 5 学習ガイド](https://ariaria2021.github.io/blog/react-vue-to-svelte-tile-merge-game/)
 - 🎮 [React版デモ](https://ariaria2021.github.io/tile-merge-game-frameworks/react/)
 - 🎮 [Vue3版デモ](https://ariaria2021.github.io/tile-merge-game-frameworks/vue3/)
+- 🎮 [Svelte版デモ](https://ariaria2021.github.io/tile-merge-game-frameworks/svelte/)
 - 💻 [GitHubリポジトリ](https://github.com/ariaria2021/tile-merge-game-frameworks)
