@@ -8,13 +8,15 @@ draft: true
 
 ## はじめに
 
-タブや権限、入力状態などが絡むと、UIを表示する条件はすぐに複雑になります。
+UIを表示する条件は、最初はシンプルです。たとえば「ログイン済みならメニューを出す」といった条件なら、テンプレートに直接書いても困りません。
+
+しかし、権限・機能フラグ・読み込み状態などが絡むと、条件はすぐに複雑になります。
 
 ```tsx
-{currentTab === 'collection' && hasUnlockedItems && !isLoading && <CollectionBook />}
+{user.role === 'admin' && hasMfa && !isLoading && <AdminPanel />}
 ```
 
-この程度ならJSXやテンプレートに直接書いて問題ありません。しかし、条件が複数箇所で必要になったり、例外が増えたりすると、「どの状態で表示されるべきか」を確認しづらくなります。
+条件が複数箇所で必要になったり、例外が増えたりすると、「誰に・いつ表示されるべきか」を確認しづらくなります。
 
 この記事では、表示条件をフレームワークのテンプレートから切り離し、普通のTypeScriptとして単体テストする方法を整理します。
 
@@ -23,14 +25,14 @@ draft: true
 まず、表示可否を判定する関数をコンポーネントの外へ出します。
 
 ```ts
-// tabRules.ts
-export type Tab = 'game' | 'collection' | 'story'
+// adminPanelRules.ts
+export type UserRole = 'guest' | 'member' | 'admin'
 
-export const canShowCollection = (
-  currentTab: Tab,
-  hasUnlockedItems: boolean,
+export const canShowAdminPanel = (
+  role: UserRole,
+  hasMfa: boolean,
   isLoading: boolean,
-) => currentTab === 'collection' && hasUnlockedItems && !isLoading
+) => role === 'admin' && hasMfa && !isLoading
 ```
 
 この関数は引数以外の状態を読まず、画面を直接操作もしません。入力が同じなら常に同じ結果を返す、いわゆる純粋関数です。
@@ -42,24 +44,24 @@ export const canShowCollection = (
 表示条件は真偽表の形でテストすると、仕様が読みやすくなります。
 
 ```ts
-// tabRules.test.ts
+// adminPanelRules.test.ts
 import { describe, expect, it } from 'vitest'
-import { canShowCollection } from './tabRules'
+import { canShowAdminPanel } from './adminPanelRules'
 
-describe('canShowCollection', () => {
+describe('canShowAdminPanel', () => {
   it.each([
-    ['collection', true, false, true],
-    ['collection', false, false, false],
-    ['collection', true, true, false],
-    ['game', true, false, false],
-    ['story', true, false, false],
-  ] as const)('%s / unlocked=%s / loading=%s → %s', (tab, unlocked, loading, expected) => {
-    expect(canShowCollection(tab, unlocked, loading)).toBe(expected)
+    ['admin', true, false, true],
+    ['admin', false, false, false],
+    ['admin', true, true, false],
+    ['member', true, false, false],
+    ['guest', true, false, false],
+  ] as const)('%s / MFA=%s / loading=%s → %s', (role, hasMfa, loading, expected) => {
+    expect(canShowAdminPanel(role, hasMfa, loading)).toBe(expected)
   })
 })
 ```
 
-このテストは「図鑑タブで、何かを解放済みで、かつ読み込み中ではないときだけ表示する」という仕様そのものです。条件を変更したときも、意図せず別の状態を壊していないか確認できます。
+このテストは「管理者で、多要素認証が済んでおり、かつ読み込み中ではないときだけ管理画面を表示する」という仕様そのものです。条件を変更したときも、意図せず別の状態を壊していないか確認できます。
 
 ## 各フレームワークでは関数を呼ぶだけ
 
@@ -68,24 +70,24 @@ describe('canShowCollection', () => {
 ### React
 
 ```tsx
-{canShowCollection(currentTab, hasUnlockedItems, isLoading) && (
-  <CollectionBook />
+{canShowAdminPanel(user.role, hasMfa, isLoading) && (
+  <AdminPanel />
 )}
 ```
 
 ### Vue 3
 
 ```vue
-<CollectionBook
-  v-if="canShowCollection(currentTab, hasUnlockedItems, isLoading)"
+<AdminPanel
+  v-if="canShowAdminPanel(user.role, hasMfa, isLoading)"
 />
 ```
 
 ### Svelte
 
 ```svelte
-{#if canShowCollection(currentTab, hasUnlockedItems, isLoading)}
-  <CollectionBook />
+{#if canShowAdminPanel(user.role, hasMfa, isLoading)}
+  <AdminPanel />
 {/if}
 ```
 
