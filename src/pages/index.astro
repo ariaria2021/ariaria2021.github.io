@@ -10,6 +10,7 @@ const latestPosts = allPosts
 const allProjects = await getCollection('projects');
 const featuredProjects = allProjects
   .filter(p => p.data.featured)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
   .slice(0, 3);
 ---
 
