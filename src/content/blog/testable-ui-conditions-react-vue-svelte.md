@@ -3,7 +3,6 @@ title: "UIの表示条件を単体テスト可能にする：React・Vue・Svelt
 description: "複雑になりがちなUIの表示条件を、テンプレートから純粋関数へ切り出し、Vitestで検証する設計をReact・Vue・Svelteの例で整理します。"
 date: 2026-09-01
 tags: ["TypeScript", "Vitest", "React", "Vue 3", "Svelte", "テスト"]
-draft: true
 ---
 
 ## はじめに
