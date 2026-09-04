@@ -21,7 +21,7 @@ CBORが表現できる値は、JSONとほぼ同じ感覚で扱えます。
 - タグ付き値（日時やビッグナンバーなど、意味づけを追加できる値）
 - true / false / null / undefined
 
-JSONとの一番の違いは、テキストではなくバイナリで表現される点です。各値の型や長さが先頭バイトに埋め込まれているため、パーサーが先読みなしで要素の境界を判断できるようになっています。
+JSONとの一番の違いは、テキストではなくバイナリで表現される点です。各値の型や長さ情報が先頭バイト（および必要に応じて後続の追加情報バイト）に埋め込まれているため、パーサーが先読みなしで要素の境界を判断できるようになっています。
 
 ## メジャータイプ（Major Type）
 
@@ -60,7 +60,7 @@ const data = {
 
 const encoded: Uint8Array = encode(data);
 console.log(Buffer.from(encoded).toString("hex"));
-// => a3646e616d656541 6c69636563616765 1e6474616773826561 646d696e6475736572 のようなバイト列
+// => b90003646e616d6565416c69636563616765181e6474616773826561646d696e6475736572
 
 // デコード：バイト列を元のオブジェクトに戻す
 const decoded = decode(encoded);
@@ -105,7 +105,12 @@ const encoded = encode(tagged);
 const decoded = decode(encoded);
 
 console.log(decoded);
-// => Tag { value: '2026-08-29T...', tag: 0 }
+// => 2026-08-29T... (cbor-x では Tag 0 が Date オブジェクトに自動復元される)
+
+// 組み込み拡張のないカスタムタグの場合は Tag インスタンスとして取得される
+const customTagged = new Tag("some-value", 42);
+console.log(decode(encode(customTagged)));
+// => Tag { value: 'some-value', tag: 42 }
 ```
 
 タグの一覧は[RFC 8949 §3.4](https://www.rfc-editor.org/rfc/rfc8949#section-3.4)や[IANAのCBOR Tags レジストリ](https://www.iana.org/assignments/cbor-tags/cbor-tags.xhtml)で確認できます。
