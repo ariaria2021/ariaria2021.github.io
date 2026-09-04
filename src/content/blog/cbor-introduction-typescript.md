@@ -1,9 +1,9 @@
 ---
 title: "CBOR入門 — バイナリのデータフォーマットをTypeScriptで触ってみる"
 description: "JSONに似たデータモデルを持つバイナリフォーマット「CBOR（RFC 8949）」の基礎知識と、TypeScript（cbor-x）を使ったエンコード・デコード、データサイズ比較、タグ付き値の活用方法を解説します。"
-date: 2026-08-29
+date: 2026-09-04
 tags: ["TypeScript", "CBOR", "WebAuthn", "RFC8949", "Web開発"]
-draft: true
+draft: false
 ---
 
 CBOR（Concise Binary Object Representation）は、JSONに似たデータモデルを持つバイナリのデータフォーマットです。[RFC 8949](https://www.rfc-editor.org/rfc/rfc8949)で標準化されており、WebAuthnやCOSE（CBOR版のJWTのようなもの）、IoTデバイス間の通信などで使われています。こうした場所を扱う機会があると、CBORを避けて通れないことがあります。この記事では、TypeScriptで実際にエンコード・デコードしながらCBORの基本を見ていきます。
